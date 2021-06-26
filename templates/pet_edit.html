@@ -19,7 +19,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="url to the landing view">Home</a>
+                <a class="nav-link" href="url to the all pets view">All Pet Photos</a>
+                <a class="nav-link" href="url to the create view">Add Pet Photo</a>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Login</a>
                 </li>
@@ -30,20 +32,16 @@
         </div>
     </nav>
     <div class="container">
-        <div class="d-flex">
-            <div class="d-inline p-2 w-50">
-                <img src="pet_image_url" class="w-50 rounded mx-auto d-block">
+        <h1 class="text-center">Edit pet photo</h1>
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <form method="post" class="furniture-form">
+                    edit_form
+                    <button class="btn btn-primary mt-2" type="submit">Edit</button>
+                </form>
             </div>
-            <div class="d-inline p-2 w-50">
-                <div class="d-flex justify-content-between">
-                    <h5><u>Type:</u> pet_type</h5>
-                    <h5><u>Name:</u> pet_name</h5>
-                    <h5><u>Age:</u> pet_age</h5>
-                </div>
-                <p class="mt-2">Description: pet_description</p>
-				<a href="url_to_pet_like_id"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                <p class="mt-2">Likes: likes_count</p>
-            </div>
+            <div class="col-lg-3"></div>
         </div>
     </div>
 </body>
@@ -57,4 +55,5 @@
     integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
     crossorigin="anonymous"></script>
 </body>
+
 </html>
