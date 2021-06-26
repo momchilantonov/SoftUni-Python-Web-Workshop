@@ -13,14 +13,14 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom:2%">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li><a class="nav-link" href="{% url 'landing page' %}">Home</a></li>
                 <li><a class="nav-link" href="{% url 'pets list' %}">All pets</a></li>
+                <li><a class="nav-link" href="{% url 'create pet' %}">Add pet</a></li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Login</a>
                 </li>
@@ -29,11 +29,11 @@
                 </li>
             </ul>
         </div>
-    </nav>
+      </nav>
     <div class="container">
         <div class="d-flex">
             <div class="d-inline p-2 w-50">
-                <img src="{{ pet.image_url }}" class="w-50 rounded mx-auto d-block">
+                <img src="{{ pet.image_url }}" class="w-50 rounded mx-auto d-block" alt="...">
             </div>
             <div class="d-inline p-2 w-50">
                 <div class="d-flex justify-content-between">
@@ -44,6 +44,29 @@
                 <p class="mt-2">Description: {{ pet.description }}</p>
 				<a href="{% url 'like pet' pet.id %}"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
                 <p class="mt-2">Likes: {{ pet.likes_count }}</p>
+                <a href="{% url 'edit pet' pet.id %}" class="btn btn-success">Edit</a>
+                <a href="{% url 'delete pet' pet.id %}" class="btn btn-danger">Delete</a>
+                <div class="d-block" style="background-color: #f1e3e3; padding:2%">
+                    {% if comments  %}
+                         {% for comment in comments %}
+                            <div class="box">
+                                <h5><em>{{ comment.comment }}</em></h5>
+                                <hr>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="box">
+                        <h3>There are no comments for this pet. </h3>
+                    </div>
+                    {% endif %}
+                    <div class="box">
+                        <form method="post" action="{% url 'comment pet' pet.id %}">
+                            {% csrf_token %}
+                            {{ comment_form }}
+                            <button class="btn btn-primary mt-2" type="submit">Add comment</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
