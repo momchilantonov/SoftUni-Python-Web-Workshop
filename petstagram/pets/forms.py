@@ -1,4 +1,9 @@
+import os
+from os.path import join
+
 from django import forms
+from django.conf import settings
+
 from petstagram.pets.models import Pet
 
 
@@ -34,7 +39,7 @@ class PetCreateForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'image_url': forms.URLInput(
+            'image': forms.FileInput(
                 attrs={
                     'class': 'form-control'
                 }
@@ -51,6 +56,14 @@ class PetEditForm(forms.ModelForm):
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
     #     self.fields['type'].widget.attrs.update({'readonly': 'readonly'})
+
+    def save(self, commit=True):
+        db_pet = Pet.objects.get(pk=self.instance.id)
+        if commit:
+            # os.remove(join(settings.MEDIA_ROOT, db_pet.image.url[len('/media/'):]))
+            os.remove(join(settings.MEDIA_ROOT, str(db_pet.image)))
+        return super().save(commit)
+
     class Meta:
         model = Pet
         fields = '__all__'
@@ -71,7 +84,7 @@ class PetEditForm(forms.ModelForm):
                     'class': 'form-control'
                 }
             ),
-            'image_url': forms.URLInput(
+            'image': forms.FileInput(
                 attrs={
                     'class': 'form-control'
                 }
@@ -82,7 +95,6 @@ class PetEditForm(forms.ModelForm):
                 }
             )
         }
-
 
 # class PetDeleteForm(PetCreateForm):
 #     def __init__(self, *args, **kwargs):

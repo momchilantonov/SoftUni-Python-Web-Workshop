@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Petstagram</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="https://pluspng.com/img-png/instagram-png-instagram-png-icon-1024.png">
@@ -27,34 +27,13 @@
                 <a class="nav-link" href="#">Sign Up</a>
             </li>
         </ul>
+        `
     </div>
 </nav>
 <div class="container">
-    <div class="jumbotron parent">
-        <img style="width: 100%"
-             src="https://activepets.co.za/web/ap-content/uploads/2019/08/Active-pets-dogs-and-cats.png" alt="">
-        <div class="absolute">
-            <h1 class="display-4">Welcome to Petstagram</h1>
-            <p class="lead">Share your pets photos.</p>
-            <hr class="my-4">
-            <div class="inner cover">
-                <h1 class="cover-heading"></h1>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <p class="lead">Already have an account? <br><a href="#" class="btn btn-lg btn-secondary">sign
-                            in</a></p>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="lead"> Do not have an account? <br>
-                            <a href="#" class="btn btn-lg btn-secondary">sign up</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% block content %}
+    {% endblock %}
 </div>
-</body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

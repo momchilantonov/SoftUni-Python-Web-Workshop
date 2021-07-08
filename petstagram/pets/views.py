@@ -105,7 +105,7 @@ def create_pet(req):
     if req.method == "GET":
         form = PetCreateForm()
         return show_form(req, form, temp)
-    form = PetCreateForm(req.POST)
+    form = PetCreateForm(req.POST, req.FILES)
     return save_form(req, form, temp, red)
 
 
@@ -118,6 +118,7 @@ def edit_pet(req, pk):
         return show_form(req, form, temp)
     form = PetEditForm(
         req.POST,
+        req.FILES,
         instance=pet,
     )
     return save_form(req, form, temp, red)
