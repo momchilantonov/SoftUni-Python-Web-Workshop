@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from petstagram.common.forms import CommentForm
@@ -52,10 +53,11 @@ class ListPetsView(ListView):
 #     return render(req, 'pet_detail.html', context)
 
 
-def pet_details(request, pk):
+def pet_details(req, pk):
     pet = Pet.objects.get(pk=pk)
     pet.likes_count = pet.like_set.count()
-
+    is_owner = pet.user == req.user
+    is_liked = pet.like_set.filter(user_id=req.user.id).exists()
     context = {
         'pet': pet,
         'comment_form': CommentForm(
@@ -64,9 +66,11 @@ def pet_details(request, pk):
             }
         ),
         'comments': pet.comment_set.all(),
+        'is_owner': is_owner,
+        'is_liked': is_liked,
     }
 
-    return render(request, 'pet_detail.html', context)
+    return render(req, 'pet_detail.html', context)
 
 
 # With logic here in viwes
@@ -84,46 +88,71 @@ def pet_details(request, pk):
 
 
 # With logic forms
-def comment_pet(request, pk):
-    form = CommentForm(request.POST)
+@login_required
+def comment_pet(req, pk):
+    form = CommentForm(req.POST)
     if form.is_valid():
-        form.save()
+        comment = form.save(commit=False)
+        comment.user = req.user
+        comment.save()
 
     return redirect('pet details', pk)
 
 
+@login_required
 def like_pet(req, pk):
     pet = Pet.objects.get(pk=pk)
-    like = Like(pet=pet)
-    like.save()
+    like_by_user = pet.like_set.filter(user_id=req.user.id).first()
+    if like_by_user:
+        like_by_user.delete()
+    else:
+        like = Like(
+            pet=pet,
+            user=req.user,
+        )
+        like.save()
     return redirect('pet details', pet.id)
 
 
+@login_required
 def create_pet(req):
-    temp = 'pet_create.html'
-    red = 'pets list'
-    if req.method == "GET":
+    if req.method == 'POST':
+        form = PetCreateForm(req.POST, req.FILES)
+        if form.is_valid():
+            pet = form.save(commit=False)
+            pet.user = req.user
+            pet.save()
+            return redirect('pets list')
+    else:
         form = PetCreateForm()
-        return show_form(req, form, temp)
-    form = PetCreateForm(req.POST, req.FILES)
-    return save_form(req, form, temp, red)
+
+    context = {
+        'form': form,
+    }
+
+    return render(req, 'pet_create.html', context)
 
 
+@login_required
 def edit_pet(req, pk):
-    temp = 'pet_edit.html'
-    red = 'pets list'
-    pet = get_pet_by_id(pk)
-    if req.method == "GET":
-        form = PetEditForm(initial=pet.__dict__)
-        return show_form(req, form, temp)
-    form = PetEditForm(
-        req.POST,
-        req.FILES,
-        instance=pet,
-    )
-    return save_form(req, form, temp, red)
+    pet = Pet.objects.get(pk=pk)
+    if req.method == 'POST':
+        form = PetEditForm(req.POST, req.FILES, instance=pet)
+        if form.is_valid():
+            form.save()
+            return redirect('pets list')
+    else:
+        form = PetEditForm(instance=pet)
+
+    context = {
+        'form': form,
+        'pet': pet,
+    }
+
+    return render(req, 'pet_edit.html', context)
 
 
+@login_required
 def delete_pet(req, pk):
     temp = 'pet_delete.html'
     red = 'pets list'

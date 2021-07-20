@@ -22,7 +22,7 @@ from petstagram.pets.models import Pet
 class PetCreateForm(forms.ModelForm):
     class Meta:
         model = Pet
-        fields = '__all__'
+        exclude = ('user', )
         widgets = {
             'type': forms.Select(
                 attrs={
